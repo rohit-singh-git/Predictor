@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor</title>
+</head>
+
+<body>
+    <form method="POST" id="prediction-form">
+        <div class="autocomplete">
+            <label for="nse_symbol">Stock Name:</label>
+            <input type="text" id="nse_symbol" name="nse_symbol" required>
+            <div id="autocomplete-list" class="autocomplete-items"></div>
+        </div><br><br>
+        <label for="open_value">Open:</label>
+        <input type="text" id="open_value" name="open" required><br>
+        <label for="high_value">High:</label>
+        <input type="text" id="high_value" name="high" required><br>
+        <label for="low_value">Low:</label>
+        <input type="text" id="low_value" name="low" required><br><br>
+        <input type="submit" value="Predict" id="submit">
+        <div id="prediction-result"></div>
+        {% if pred %}
+        <div>
+            <h3 style="text-align: center;">Prediction Result:</h3>
+            <p style="text-align: center;">{{ pred }}</p>
+        </div>
+        {% endif %}
+    </form>
+    <script>
+        const inputField = document.getElementById('nse_symbol');
+        const autocompleteList = document.getElementById('autocomplete-list');
+
+        inputField.addEventListener('input', async function (event) {
+            const inputValue = event.target.value;
+            if (inputValue.length > 0) {
+                const response = await fetch(`/autocomplete?query=${inputValue}`);
+                const data = await response.json();
+                autocompleteList.innerHTML = '';
+                data.forEach(item => {
+                    const option = document.createElement('div');
+                    option.textContent = item;
+                    option.classList.add('autocomplete-item');
+                    option.addEventListener('click', function () {
+                        inputField.value = item;
+                        autocompleteList.innerHTML = '';
+                    });
+                    autocompleteList.appendChild(option);
+                });
+                autocompleteList.style.display = 'block';
+            } else {
+                autocompleteList.innerHTML = '';
+                autocompleteList.style.display = 'none';
+            }
+        });
+        document.addEventListener('click', function (event) {
+            if (!autocompleteList.contains(event.target)) {
+                autocompleteList.innerHTML = '';
+                autocompleteList.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('load', function(){
+            document.getElementById('nse_symbol').focus();
+        })
+    </script>
+
+</body>
+
+</html>

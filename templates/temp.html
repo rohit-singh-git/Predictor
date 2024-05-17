@@ -1,0 +1,40 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Name Autocomplete</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <label for="stock_name">Stock Name:</label>
+    <input type="text" id="stock_name" name="stock_name">
+    <div id="autocomplete"></div>
+
+    <script>
+        const inputField = document.getElementById('stock_name');
+        const autocompleteDiv = document.getElementById('autocomplete');
+
+        inputField.addEventListener('input', async function(event) {
+            const inputValue = event.target.value;
+            if (inputValue.length > 0) {
+                const response = await fetch(`/autocomplete?query=${inputValue}`);
+                const data = await response.json();
+                autocompleteDiv.innerHTML = '';
+                data.forEach(item => {
+                    const option = document.createElement('div');
+                    option.textContent = item;
+                    option.addEventListener('click', function() {
+                        inputField.value = item;
+                        autocompleteDiv.innerHTML = '';
+                    });
+                    autocompleteDiv.appendChild(option);
+                });
+            } else {
+                autocompleteDiv.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
