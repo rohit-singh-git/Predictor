@@ -11,24 +11,24 @@
 <body>
     <form method="POST" id="prediction-form">
         <div class="autocomplete">
-            <label for="nse_symbol">Stock Name:</label>
+            <label for="nse_symbol">Stock Symbol or Company Name:</label>
             <input type="text" id="nse_symbol" name="nse_symbol" required>
             <div id="autocomplete-list" class="autocomplete-items"></div>
-        </div><br><br>
+        </div><br>
         <label for="open_value">Open:</label>
-        <input type="text" id="open_value" name="open" required><br>
+        <input type="number" step="0.01" id="open_value" name="open" required><br>
         <label for="high_value">High:</label>
-        <input type="text" id="high_value" name="high" required><br>
+        <input type="number" step="0.01" id="high_value" name="high" required><br>
         <label for="low_value">Low:</label>
-        <input type="text" id="low_value" name="low" required><br><br>
+        <input type="number" step="0.01" id="low_value" name="low" required><br><br>
         <input type="submit" value="Predict" id="submit">
         <div id="prediction-result"></div>
-        {% if pred %}
-        <div>
-            <h3 style="text-align: center;">Prediction Result:</h3>
-            <p style="text-align: center;">{{ pred }}</p>
-        </div>
-        {% endif %}
+            {% if pred %}
+            <div>
+                <h3 style="text-align: center;">Prediction Result:</h3>
+                <p style="text-align: center;">{{ pred }}</p>
+            </div>
+            {% endif %}
     </form>
     <script>
         const inputField = document.getElementById('nse_symbol');
@@ -42,10 +42,10 @@
                 autocompleteList.innerHTML = '';
                 data.forEach(item => {
                     const option = document.createElement('div');
-                    option.textContent = item;
+                    option.textContent = `${item.symbol} - ${item.name}`;
                     option.classList.add('autocomplete-item');
                     option.addEventListener('click', function () {
-                        inputField.value = item;
+                        inputField.value = item.symbol;
                         autocompleteList.innerHTML = '';
                     });
                     autocompleteList.appendChild(option);
