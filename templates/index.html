@@ -42,10 +42,10 @@
                 autocompleteList.innerHTML = '';
                 data.forEach(item => {
                     const option = document.createElement('div');
-                    option.textContent = `${item.symbol} - ${item.name}`;
+                    option.textContent = `${item.SYMBOL} - ${item.NAMEOFCOMPANY}`;
                     option.classList.add('autocomplete-item');
                     option.addEventListener('click', function () {
-                        inputField.value = item.symbol;
+                        inputField.value = item.SYMBOL;
                         autocompleteList.innerHTML = '';
                     });
                     autocompleteList.appendChild(option);
