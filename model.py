@@ -1,4 +1,6 @@
 import pandas as pd
+import requests
+from io import StringIO
 import yfinance as yf
 from sklearn.exceptions import NotFittedError
 from sklearn.linear_model import LinearRegression
@@ -8,10 +10,24 @@ from sklearn.tree import DecisionTreeRegressor
 lr_model = LinearRegression()
 dtr_model = DecisionTreeRegressor()
 
+
+def get_stock_names_from_github():
+    github_raw_url = 'https://raw.githubusercontent.com/rohit-singh-git/Predictor/main/Stock_names.csv'
+    response = requests.get(github_raw_url)
+    if response.status_code == 200:
+        data = pd.read_csv(StringIO(response.text))
+        data = data.to_dict(orient="records")
+        return data
+    else:
+        raise ValueError(f"Failed to fetch data from GitHub: {response.status_code}")
+
+
+symbols = get_stock_names_from_github()
+
 data = pd.read_csv("Stock_names.csv")
-stock_list = data.to_dict(orient="records")
+# stock_list = data.to_dict(orient="records")
 
-
+stock_list = get_stock_names_from_github()
 
 
 def train_model(stock_name):
@@ -39,4 +55,3 @@ def predict(open, high, low):
         raise ValueError("Models are not trained yet. Please train the models before predicting.")
 
     return lr[0], dtr[0]
-
