@@ -1,7 +1,7 @@
 fastapi
 pandas
-scikit_learn
 uvicorn
 yfinance
 requests
 scikit-learn
+jinja2
