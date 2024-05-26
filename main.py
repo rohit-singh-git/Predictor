@@ -44,8 +44,3 @@ async def autocomplete_stock_names(query: str = Query(..., min_length=1)):
                      query.lower() in stock["SYMBOL"].lower() or query.lower() in stock["NAMEOFCOMPANY"].lower()]
     return JSONResponse(content=matched_names)
 
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
