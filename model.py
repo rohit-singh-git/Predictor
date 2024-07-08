@@ -22,11 +22,8 @@ def get_stock_names_from_github():
         raise ValueError(f"Failed to fetch data from GitHub: {response.status_code}")
 
 
-symbols = get_stock_names_from_github()
-
-data = pd.read_csv("Stock_names.csv")
+# data = pd.read_csv("Stock_names.csv")
 # stock_list = data.to_dict(orient="records")
-
 stock_list = get_stock_names_from_github()
 
 
